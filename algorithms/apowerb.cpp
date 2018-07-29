@@ -6,7 +6,7 @@ using namespace std;
 ll powerRecursive(ll a, ll n) {
     if (n == 0) 
         return 1;
-    if (n%2 == 0)
+    else if (n%2 == 0)
         return powerRecursive(a*a, n/2);
     else return a*powerRecursive(a*a, (n-1)/2);
 }
@@ -14,7 +14,7 @@ ll powerRecursive(ll a, ll n) {
 ll powerRecursive(ll a, ll n, ll m) {
     if (n == 0)
         return 1;
-    if (n%2 == 0)
+    else if (n%2 == 0)
         return powerRecursive((a*a)%m, n/2, m);
     else return (a*powerRecursive((a*a)%m, (n-1)/2, m))%m;
 }
