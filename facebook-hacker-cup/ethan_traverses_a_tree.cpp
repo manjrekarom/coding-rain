@@ -2,6 +2,7 @@
 #include<cstdio>
 #include<cstring>
 #include<cstdlib>
+#include<set>
 
 using namespace std;
 
@@ -49,7 +50,7 @@ void bubbleSort(int arr1[], int arr2[], int n)
         }
      }
  
-     // IF no two elements were swapped by inner loop, then break
+     // if no two elements were swapped by inner loop, then break
      if (swapped == false)
         break;
    }
@@ -85,96 +86,60 @@ int main(int argc, char const *argv[])
         int postFillPos = 1;
         postOrder(tree, postOrderSequence, 1, &postFillPos);
 
-        for (int i=1; i<=N; i++) {
-            cout<<preOrderSequence[i]<<" ";
-        }
-        cout<<endl;
-        
-        for (int i=1; i<=N; i++) {
-            cout<<postOrderSequence[i]<<" ";
-        }
-        cout<<endl;
-        
-        // generate labels
-        // int label = 1;
-        // int preBreak = 0;
-        // int allK = 0;
+        // for (int i=1; i<=N; i++) {
+        //     cout<<preOrderSequence[i]<<" ";
+        // }
+        // cout<<endl;
         
         // for (int i=1; i<=N; i++) {
-        //     if (labels[preOrderSequence[i]] == -1 && labels[postOrderSequence[i]] == -1) {
-        //         labels[preOrderSequence[i]] = label;
-        //         labels[postOrderSequence[i]] = label; 
-            
-        //         // New label assigned so increment label
-        //         label++;
-        //         if (label == K) {
-        //             allK = 1;
-        //         }
-        //         if (label > K) {
-        //             label = 1;
-        //         }
-        //     }
-        //     else if (labels[preOrderSequence[i]] == -1) {
-        //         labels[preOrderSequence[i]] = labels[postOrderSequence[i]]; 
-                
-        //     }
-        //     else if (labels[postOrderSequence[i]] == -1) {
-        //         labels[postOrderSequence[i]] = labels[preOrderSequence[i]];
-        //     }
-        //     else if (labels[preOrderSequence[i]] == labels[postOrderSequence[i]]) {
-        //         // just relax
-        //     }
-        //     else {
-        //         // cannot assign labels properly
-        //         preBreak = 1;
-        //         break;
-        //     }
-
+        //     cout<<postOrderSequence[i]<<" ";
         // }
-
+        // cout<<endl;
 
         // qsort one array with respect to another one
         bubbleSort(preOrderSequence, postOrderSequence, N);        
 
-        for (int i=1; i<=N; i++) {
-            cout<<preOrderSequence[i]<<" ";
-        }
-        cout<<endl;
+        // for (int i=1; i<=N; i++) {
+        //     cout<<preOrderSequence[i]<<" ";
+        // }
+        // cout<<endl;
         
-        for (int i=1; i<=N; i++) {
-            cout<<postOrderSequence[i]<<" ";
-        }
-        cout<<endl;
+        // for (int i=1; i<=N; i++) {
+        //     cout<<postOrderSequence[i]<<" ";
+        // }
+        // cout<<endl;
 
         int label = 1;
-        int allK = 0;
-
         for (int i=1; i<=N; i++) {  
                       
             int first = preOrderSequence[i];
             int second = postOrderSequence[i];
 
 
-            while (labels[first] != label || labels[second] != label) {
-                labels[first] = label;
-                labels[second] = label; 
-            }
+            if (labels[first] == -1 || labels[second] == -1) {
+                while (labels[first] == -1 || labels[second] == -1) {
+                    labels[first] = label;
+                    labels[second] = label;
+                    int t = first;
+                    first = second;
+                    second = postOrderSequence[second];  
+                }
 
-            label++;
-            if (label > K) {
-                allK = 1;
-                label = 1;
+                label++;
+                if (label > K) {
+                    label = 1;
+                }
             }
         }
 
         cout<<"Case #"<<caseNo++<<": ";
 
-        int count=0;
-        for (int i=1; i<=K; i++) {
-
+        set< int > labelSet;
+        for (int i=1; i<=N; i++) {
+            labelSet.insert(labels[i]);
         }
 
-        if (allK == 0) { 
+        if (labelSet.size() < K) { 
             cout<<"Impossible";
         }
         else {
