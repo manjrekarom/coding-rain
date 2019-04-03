@@ -26,7 +26,9 @@ class Heap {
 
   public:
     bool pushItem(int item);
-    int popItem();  
+    int popItem();
+    void drawHeap();
+    int findHeight();  
 };
 
 bool Heap::pushItem(int item) {
@@ -51,10 +53,49 @@ int Heap::popItem() {
   return true;
 }
 
+int Heap::findHeight() {
+  int height = 0;
+  for (int i = vec.size() - 1; i > 0; i = i/2) {
+    height++;
+  }
+  return height;
+}
+
+void Heap::drawHeap() {
+  // i<vec.size()
+  int height = findHeight();
+  int spaceInit = pow(2, height - 1) - 1;
+  bool breakOut = false;
+  cout<<"Heaps don't lie"<<endl;
+  for (int i=1; i<=height; i++) {
+    for (int j=1; j<=spaceInit; j++) {
+      cout<<"  ";
+    }
+    for (int j=pow(2, i-1); j<=pow(2, i) - 1; j++) {
+      if (j > vec.size() - 1) {
+        breakOut = true;
+        break;
+      }
+      cout<<vec[j]<<"  ";
+    }
+    cout<<endl;
+    spaceInit--;
+
+    if (breakOut) 
+      break;
+  }
+}
+
 int main() {
   long long int n;
   cin>>n;
   Heap someHeap;
-  someHeap.pushItem(5);
+  int input;
+  for (int i=0; i<n; i++) {
+    cin>>input;
+    someHeap.pushItem(input);
+  }
+  cout<<someHeap.findHeight()<<endl;
+  someHeap.drawHeap();
 	return 0;
 }
