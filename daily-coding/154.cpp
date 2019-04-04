@@ -98,7 +98,7 @@ int Heap::findHeight() {
   for (int i = vec.size() - 1; i > 0; i = i/2) {
     height++;
   }
-  
+
   return height;
 }
 
@@ -131,23 +131,23 @@ void Heap::drawHeap() {
 
 int main() {
   long long int n;
-  
   cin>>n;
-  
+
   Heap someHeap;
   pair<int, int> input;
 
-  
   for (int i=1; i<=n; i++) {
-    cin>>input.first;
-    input.second = i;
+    input.first = i;
+    cin>>input.second;
     someHeap.pushItem(input);
   }
 
   cout<<someHeap.findHeight()<<endl;
   someHeap.drawHeap();
+
   for (int i=n; i>=1; i--) {
     cout<<someHeap.popItem().first<<", ";
   }
+
 	return 0;
 }
