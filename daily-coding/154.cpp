@@ -14,21 +14,36 @@ pop(), which removes and returns the max value of the heap
 #include<vector>
 using namespace std;
 
-void swap(int& a, int& b) {
-  int t;
-  t = a;
-  a = b;
-  b = t;
-}
-
 class Heap {
+  /* Min heap */ 
   vector<int> vec;
 
   public:
     bool pushItem(int item);
     int popItem();
     void drawHeap();
-    int findHeight();  
+    int findHeight();
+
+  private:
+    int smallest(int parent, int left, int right) {
+      if (vec[parent] < vec[left]) {
+        if (vec[parent] < vec[right]) 
+          return parent;
+        else return right;
+      }
+      else {
+        if (vec[left] < vec[right]) 
+          return left;
+        else return right;
+      }
+    }
+
+    void swap(int& a, int& b) {
+      int t;
+      t = a;
+      a = b;
+      b = t;
+    }
 };
 
 bool Heap::pushItem(int item) {
@@ -39,6 +54,7 @@ bool Heap::pushItem(int item) {
   else {
     vec.push_back(item);
     int index = vec.size() - 1; 
+    /* Percolate up */ 
     for (int i = index; i>1; i = i/2) {
       if (vec[i] < vec[i/2]) {
         swap(vec[i], vec[i/2]);
@@ -49,8 +65,25 @@ bool Heap::pushItem(int item) {
 }
 
 int Heap::popItem() {
-  cout<<"Popping"<<endl;
-  return true;
+  if (vec.size() < 2) {
+    cout<<"Can't pop. Not enough elements."<<endl;
+    return -999;
+  }
+
+  cout<<"Popping ..."<<endl; 
+  int temp = vec[1];
+  
+  /* Percolate down */
+  vec[1] = vec.back();
+  vec.pop_back();
+  
+  int i = 1;
+  while (2*i + 1 < vec.size()) {
+    int minIndex = smallest(i, 2*i, 2*i + 1);
+    swap(vec[i], vec[minIndex]);
+    i = minIndex;
+  }
+  return temp;
 }
 
 int Heap::findHeight() {
@@ -81,21 +114,24 @@ void Heap::drawHeap() {
     cout<<endl;
     spaceInit--;
 
-    if (breakOut) 
+    if (breakOut)
       break;
   }
 }
 
 int main() {
   long long int n;
+  int input;
   cin>>n;
   Heap someHeap;
-  int input;
-  for (int i=0; i<n; i++) {
+  for (int i=n; i>=1; i--) {
     cin>>input;
     someHeap.pushItem(input);
   }
   cout<<someHeap.findHeight()<<endl;
   someHeap.drawHeap();
+  for (int i=n; i>=1; i--) {
+    cout<<someHeap.popItem()<<", ";
+  }
 	return 0;
 }
